@@ -17,6 +17,7 @@ public class TestBanco {
 		Cuenta cuenta2Creada = banco.crearCuenta(cliente1);
 		cuenta2Creada.imprimir();
 		
+		System.out.println("----DEPOSITOS----");
 		boolean resultado=banco.depositar(20, cuenta2Creada);
 		System.out.println(resultado);
 		cuenta2Creada.imprimir();
@@ -24,6 +25,16 @@ public class TestBanco {
 		resultado =banco.depositar(-80, cuenta2Creada);
 		System.out.println(resultado);
 		cuenta2Creada.imprimir();
+		
+		System.out.println("----RETIROS----");
+		resultado=banco.retirar(20, cuenta2Creada);
+		System.out.println(resultado);
+		cuenta2Creada.imprimir();
+		
+		resultado=banco.retirar(20, cuenta2Creada);
+		System.out.println(resultado);
+		cuenta2Creada.imprimir();
+		
 	}
 	
 }

@@ -189,4 +189,127 @@ public class TestBancoJUnit {
 		assertEquals("C006", cuenta.getId());
 		assertEquals("A", cuenta.getTipo());
 	}
+	
+	@Test
+	public void testRetirarCasoCorrecto() {
+		// Valida que al retirar un monto válido menor al saldo
+		// el retiro se realice y el saldo disminuya correctamente
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta cuenta = new Cuenta("C001");
+		cuenta.setSaldoActual(200);
+
+		// Act
+		boolean resultado = banco.retirar(50, cuenta);
+
+		// Assert
+		assertTrue(resultado);
+		assertEquals(150, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testRetirarTodoElSaldo() {
+		// Valida que se pueda retirar exactamente todo el saldo
+		// y la cuenta quede en cero
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta cuenta = new Cuenta("C002");
+		cuenta.setSaldoActual(100);
+
+		// Act
+		boolean resultado = banco.retirar(100, cuenta);
+
+		// Assert
+		assertTrue(resultado);
+		assertEquals(0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testRetirarMontoMayorAlSaldo() {
+		// Valida que no se permita retirar un monto mayor al saldo disponible
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta cuenta = new Cuenta("C003");
+		cuenta.setSaldoActual(80);
+
+		// Act
+		boolean resultado = banco.retirar(120, cuenta);
+
+		// Assert
+		assertFalse(resultado);
+		assertEquals(80, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testRetirarMontoCero() {
+		// Valida que no se pueda retirar un monto igual a cero
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta cuenta = new Cuenta("C004");
+		cuenta.setSaldoActual(50);
+
+		// Act
+		boolean resultado = banco.retirar(0, cuenta);
+
+		// Assert
+		assertFalse(resultado);
+		assertEquals(50, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testRetirarMontoNegativo() {
+		// Valida que no se permita retirar montos negativos
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta cuenta = new Cuenta("C005");
+		cuenta.setSaldoActual(100);
+
+		// Act
+		boolean resultado = banco.retirar(-30, cuenta);
+
+		// Assert
+		assertFalse(resultado);
+		assertEquals(100, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testRetirarSaldoMinimo() {
+		// Valida un caso límite donde el saldo es muy pequeño
+		// pero el retiro sigue siendo válido
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta cuenta = new Cuenta("C006");
+		cuenta.setSaldoActual(0.5);
+
+		// Act
+		boolean resultado = banco.retirar(0.5, cuenta);
+
+		// Assert
+		assertTrue(resultado);
+		assertEquals(0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testNoSeModificaSaldoCuandoFallaRetiro() {
+		// Valida que si el retiro no es válido,
+		// el saldo permanezca exactamente igual
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta cuenta = new Cuenta("C007");
+		cuenta.setSaldoActual(300);
+
+		// Act
+		boolean resultado = banco.retirar(500, cuenta);
+
+		// Assert
+		assertFalse(resultado);
+		assertEquals(300, cuenta.getSaldoActual(), 0.0001);
+	}
 }
