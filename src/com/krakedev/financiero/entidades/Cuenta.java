@@ -54,5 +54,7 @@ public class Cuenta {
 				+ "  ||  Cliente:");
 				propietario.imprimir();
 	}
+	
+	
 
 }

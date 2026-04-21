@@ -17,7 +17,13 @@ public class TestBanco {
 		Cuenta cuenta2Creada = banco.crearCuenta(cliente1);
 		cuenta2Creada.imprimir();
 		
+		boolean resultado=banco.depositar(20, cuenta2Creada);
+		System.out.println(resultado);
+		cuenta2Creada.imprimir();
 		
+		resultado =banco.depositar(-80, cuenta2Creada);
+		System.out.println(resultado);
+		cuenta2Creada.imprimir();
 	}
 	
 }
