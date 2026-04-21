@@ -18,7 +18,7 @@ public class TestBanco {
 		cuenta2Creada.imprimir();
 		
 		System.out.println("----DEPOSITOS----");
-		boolean resultado=banco.depositar(20, cuenta2Creada);
+		boolean resultado=banco.depositar(900, cuenta2Creada);
 		System.out.println(resultado);
 		cuenta2Creada.imprimir();
 		
@@ -35,6 +35,16 @@ public class TestBanco {
 		System.out.println(resultado);
 		cuenta2Creada.imprimir();
 		
+		System.out.println("----TRANSFERENCIAS----");
+		resultado=banco.transferir(20, cuenta2Creada,cuenta1Creada);
+		System.out.println(resultado);
+		cuenta1Creada.imprimir();
+		cuenta2Creada.imprimir();
+		
+		resultado=banco.transferir(1000, cuenta1Creada,cuenta2Creada);
+		System.out.println(resultado);
+		cuenta1Creada.imprimir();
+		cuenta2Creada.imprimir();
 	}
 	
 }

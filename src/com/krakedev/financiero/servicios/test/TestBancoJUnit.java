@@ -312,4 +312,149 @@ public class TestBancoJUnit {
 		assertFalse(resultado);
 		assertEquals(300, cuenta.getSaldoActual(), 0.0001);
 	}
+	
+	@Test
+	public void testTransferirCasoCorrecto() {
+		// Valida que una transferencia válida reste saldo a la cuenta origen
+		// y sume saldo a la cuenta destino
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta origen = new Cuenta("C001");
+		Cuenta destino = new Cuenta("C002");
+		origen.setSaldoActual(200.0);
+		destino.setSaldoActual(50.0);
+
+		// Act
+		boolean resultado = banco.transferir(100.0, origen, destino);
+
+		// Assert
+		assertTrue(resultado);
+		assertEquals(100.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(150.0, destino.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testTransferirMontoIgualAlSaldoOrigen() {
+		// Valida que se pueda transferir exactamente todo el saldo disponible
+		// de la cuenta origen
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta origen = new Cuenta("C003");
+		Cuenta destino = new Cuenta("C004");
+		origen.setSaldoActual(80.0);
+		destino.setSaldoActual(20.0);
+
+		// Act
+		boolean resultado = banco.transferir(80.0, origen, destino);
+
+		// Assert
+		assertTrue(resultado);
+		assertEquals(0.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(100.0, destino.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testTransferirMontoMayorAlSaldo() {
+		// Valida que no se permita transferir un monto mayor al saldo
+		// disponible en la cuenta origen
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta origen = new Cuenta("C005");
+		Cuenta destino = new Cuenta("C006");
+		origen.setSaldoActual(60.0);
+		destino.setSaldoActual(10.0);
+
+		// Act
+		boolean resultado = banco.transferir(100.0, origen, destino);
+
+		// Assert
+		assertFalse(resultado);
+		assertEquals(60.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(10.0, destino.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testTransferirMontoCero() {
+		// Valida que no se permita transferir un monto igual a cero
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta origen = new Cuenta("C007");
+		Cuenta destino = new Cuenta("C008");
+		origen.setSaldoActual(100.0);
+		destino.setSaldoActual(30.0);
+
+		// Act
+		boolean resultado = banco.transferir(0.0, origen, destino);
+
+		// Assert
+		assertFalse(resultado);
+		assertEquals(100.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(30.0, destino.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testTransferirMontoNegativo() {
+		// Valida que no se permita transferir un monto negativo
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta origen = new Cuenta("C009");
+		Cuenta destino = new Cuenta("C010");
+		origen.setSaldoActual(120.0);
+		destino.setSaldoActual(40.0);
+
+		// Act
+		boolean resultado = banco.transferir(-25.0, origen, destino);
+
+		// Assert
+		assertFalse(resultado);
+		assertEquals(120.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(40.0, destino.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testTransferirMismaCuenta() {
+		// Valida que no se permita transferir dinero hacia la misma cuenta
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta cuenta1 = new Cuenta("C011");
+		Cuenta cuenta2 = new Cuenta("C011"); // mismo id
+		cuenta1.setSaldoActual(90.0);
+		cuenta2.setSaldoActual(90.0);
+
+		// Act
+		boolean resultado = banco.transferir(20.0, cuenta1, cuenta2);
+
+		// Assert
+		assertFalse(resultado);
+		assertEquals(90.0, cuenta1.getSaldoActual(), 0.0001);
+		assertEquals(90.0, cuenta2.getSaldoActual(), 0.0001);
+	}
+
+	@Test
+	public void testNoCambianSaldosCuandoTransferenciaFalla() {
+		// Valida que cuando la transferencia no puede realizarse,
+		// los saldos de ambas cuentas permanezcan sin cambios
+		
+		// Arrange
+		Banco banco = new Banco();
+		Cuenta origen = new Cuenta("C012");
+		Cuenta destino = new Cuenta("C013");
+		origen.setSaldoActual(30.0);
+		destino.setSaldoActual(70.0);
+
+		// Act
+		boolean resultado = banco.transferir(50.0, origen, destino);
+
+		// Assert
+		assertFalse(resultado);
+		assertEquals(30.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(70.0, destino.getSaldoActual(), 0.0001);
+	}
+	
 }
