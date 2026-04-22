@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.krakedev.financiero.entidades.Cliente;
@@ -12,7 +13,8 @@ import com.krakedev.financiero.entidades.Cuenta;
 import com.krakedev.financiero.servicios.Banco;
 
 public class TestBancoJUnit {
-
+	
+	@DisplayName("crearCuenta(): genera cuenta con código inicial, saldo 0 y cliente propietario")
 	@Test
 	public void testCrearCuentaCasoCorrecto() {
 		// Valida que al crear una cuenta:
@@ -37,7 +39,8 @@ public class TestBancoJUnit {
 		assertEquals("A", cuenta.getTipo());
 		assertEquals(1001, banco.getUltimoCodigo());
 	}
-
+	
+	@DisplayName("crearCuenta(): respeta último código modificado y lo incrementa")
 	@Test
 	public void testCrearCuentaConUltimoCodigoModificado() {
 		// Valida que si el último código del banco cambia,
@@ -58,7 +61,8 @@ public class TestBancoJUnit {
 		assertEquals(cliente, cuenta.getPropietario());
 		assertEquals(2001, banco.getUltimoCodigo());
 	}
-
+	
+	@DisplayName("crearCuenta(): permite crear cuenta con cliente vacío")
 	@Test
 	public void testCrearCuentaConClienteVacio() {
 		// Valida que se pueda crear una cuenta con un cliente construido
@@ -77,7 +81,8 @@ public class TestBancoJUnit {
 		assertEquals("1000", cuenta.getId());
 		assertEquals(0.0, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("depositar(): realiza depósito correctamente con monto positivo")
 	@Test
 	public void testDepositarMontoPositivo() {
 		// Valida el caso correcto:
@@ -95,7 +100,8 @@ public class TestBancoJUnit {
 		assertTrue(resultado);
 		assertEquals(150.0, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("depositar(): suma correctamente cuando ya existe saldo previo")
 	@Test
 	public void testDepositarMontoPositivoConSaldoPrevio() {
 		// Valida que al depositar en una cuenta que ya tiene saldo,
@@ -113,7 +119,8 @@ public class TestBancoJUnit {
 		assertTrue(resultado);
 		assertEquals(250.0, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("depositar(): acepta monto mínimo positivo cercano a cero")
 	@Test
 	public void testDepositarMontoMinimoPositivo() {
 		// Valida un valor límite válido:
@@ -130,7 +137,8 @@ public class TestBancoJUnit {
 		assertTrue(resultado);
 		assertEquals(0.0001, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("depositar(): rechaza monto igual a cero")
 	@Test
 	public void testDepositarCero() {
 		// Valida un valor límite inválido:
@@ -150,6 +158,7 @@ public class TestBancoJUnit {
 		assertEquals(80.0, cuenta.getSaldoActual(), 0.0001);
 	}
 
+	@DisplayName("depositar(): rechaza montos negativos")
 	@Test
 	public void testDepositarMontoNegativo() {
 		// Valida una entrada inválida:
@@ -168,7 +177,8 @@ public class TestBancoJUnit {
 		assertFalse(resultado);
 		assertEquals(120.0, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("depositar(): no modifica la cuenta cuando el monto es inválido")
 	@Test
 	public void testDepositarNoOcurreAccionCuandoMontoInvalido() {
 		// Valida específicamente el comportamiento cuando no ocurre la acción:
@@ -190,6 +200,7 @@ public class TestBancoJUnit {
 		assertEquals("A", cuenta.getTipo());
 	}
 	
+	@DisplayName("retirar(): descuenta saldo correctamente cuando el monto es válido")
 	@Test
 	public void testRetirarCasoCorrecto() {
 		// Valida que al retirar un monto válido menor al saldo
@@ -207,7 +218,8 @@ public class TestBancoJUnit {
 		assertTrue(resultado);
 		assertEquals(150, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("retirar(): permite retirar exactamente todo el saldo disponible")
 	@Test
 	public void testRetirarTodoElSaldo() {
 		// Valida que se pueda retirar exactamente todo el saldo
@@ -225,7 +237,8 @@ public class TestBancoJUnit {
 		assertTrue(resultado);
 		assertEquals(0, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("retirar(): rechaza retiro cuando el monto supera el saldo")
 	@Test
 	public void testRetirarMontoMayorAlSaldo() {
 		// Valida que no se permita retirar un monto mayor al saldo disponible
@@ -242,7 +255,8 @@ public class TestBancoJUnit {
 		assertFalse(resultado);
 		assertEquals(80, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("retirar(): rechaza retiro de monto cero")
 	@Test
 	public void testRetirarMontoCero() {
 		// Valida que no se pueda retirar un monto igual a cero
@@ -259,7 +273,8 @@ public class TestBancoJUnit {
 		assertFalse(resultado);
 		assertEquals(50, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("retirar(): rechaza retiro de montos negativos")
 	@Test
 	public void testRetirarMontoNegativo() {
 		// Valida que no se permita retirar montos negativos
@@ -276,7 +291,8 @@ public class TestBancoJUnit {
 		assertFalse(resultado);
 		assertEquals(100, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("retirar(): permite retirar saldo mínimo disponible")
 	@Test
 	public void testRetirarSaldoMinimo() {
 		// Valida un caso límite donde el saldo es muy pequeño
@@ -294,7 +310,8 @@ public class TestBancoJUnit {
 		assertTrue(resultado);
 		assertEquals(0, cuenta.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("retirar(): no modifica el saldo cuando el retiro falla")
 	@Test
 	public void testNoSeModificaSaldoCuandoFallaRetiro() {
 		// Valida que si el retiro no es válido,
@@ -313,6 +330,7 @@ public class TestBancoJUnit {
 		assertEquals(300, cuenta.getSaldoActual(), 0.0001);
 	}
 	
+	@DisplayName("transferir(): mueve dinero correctamente entre cuentas válidas")
 	@Test
 	public void testTransferirCasoCorrecto() {
 		// Valida que una transferencia válida reste saldo a la cuenta origen
@@ -333,7 +351,8 @@ public class TestBancoJUnit {
 		assertEquals(100.0, origen.getSaldoActual(), 0.0001);
 		assertEquals(150.0, destino.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("transferir(): permite transferir exactamente todo el saldo de origen")
 	@Test
 	public void testTransferirMontoIgualAlSaldoOrigen() {
 		// Valida que se pueda transferir exactamente todo el saldo disponible
@@ -354,7 +373,8 @@ public class TestBancoJUnit {
 		assertEquals(0.0, origen.getSaldoActual(), 0.0001);
 		assertEquals(100.0, destino.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("transferir(): rechaza transferencia mayor al saldo disponible")
 	@Test
 	public void testTransferirMontoMayorAlSaldo() {
 		// Valida que no se permita transferir un monto mayor al saldo
@@ -375,7 +395,8 @@ public class TestBancoJUnit {
 		assertEquals(60.0, origen.getSaldoActual(), 0.0001);
 		assertEquals(10.0, destino.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("transferir(): rechaza transferencia con monto cero")
 	@Test
 	public void testTransferirMontoCero() {
 		// Valida que no se permita transferir un monto igual a cero
@@ -395,7 +416,8 @@ public class TestBancoJUnit {
 		assertEquals(100.0, origen.getSaldoActual(), 0.0001);
 		assertEquals(30.0, destino.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("transferir(): rechaza transferencia con monto negativo")
 	@Test
 	public void testTransferirMontoNegativo() {
 		// Valida que no se permita transferir un monto negativo
@@ -415,7 +437,8 @@ public class TestBancoJUnit {
 		assertEquals(120.0, origen.getSaldoActual(), 0.0001);
 		assertEquals(40.0, destino.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("transferir(): rechaza transferencia hacia la misma cuenta")
 	@Test
 	public void testTransferirMismaCuenta() {
 		// Valida que no se permita transferir dinero hacia la misma cuenta
@@ -435,7 +458,8 @@ public class TestBancoJUnit {
 		assertEquals(90.0, cuenta1.getSaldoActual(), 0.0001);
 		assertEquals(90.0, cuenta2.getSaldoActual(), 0.0001);
 	}
-
+	
+	@DisplayName("transferir(): mantiene saldos intactos cuando la transferencia falla")
 	@Test
 	public void testNoCambianSaldosCuandoTransferenciaFalla() {
 		// Valida que cuando la transferencia no puede realizarse,
